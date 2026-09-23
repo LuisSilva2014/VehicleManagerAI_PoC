@@ -6,7 +6,7 @@ A small, fully offline proof of concept that shows how an **ASP.NET MVC** applic
 
 The vehicle screens are intentionally simple. The interesting part is the path from a chat prompt to a structured command executed by your code, not by the model.
 
-## What you will learn
+## What am I am reviewing 
 
 - Keep MVC, services, repositories, and dependency injection even when AI is involved.
 - Treat the local model as an interpreter, never as something that writes to your data store.
