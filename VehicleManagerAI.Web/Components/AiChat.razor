@@ -1,0 +1,115 @@
+@inject IAiCommandService AiCommands
+
+<div class="ai-chat">
+    <div class="ai-chat__transcript">
+        @foreach (var turn in _turns)
+        {
+            <div class="ai-chat__bubble ai-chat__bubble--@turn.Role @(turn.IsError ? "ai-chat__bubble--error" : null)">
+                <div class="ai-chat__role">@(turn.Role == "user" ? "You" : "Local AI")</div>
+                <div class="ai-chat__text">@turn.Text</div>
+            </div>
+        }
+
+        @if (_busy)
+        {
+            <div class="ai-chat__bubble ai-chat__bubble--assistant">
+                <div class="ai-chat__role">Local AI</div>
+                <div class="ai-chat__text">Thinking with the local Ollama model&hellip;</div>
+            </div>
+        }
+    </div>
+
+    <div class="ai-chat__examples">
+        <span>Try:</span>
+        @foreach (var sample in Samples)
+        {
+            <button type="button" class="btn btn-sm btn-outline-secondary" disabled="@_busy" @onclick="() => UseSample(sample)">
+                @sample
+            </button>
+        }
+    </div>
+
+    <form class="ai-chat__composer" @onsubmit="SendAsync" @onsubmit:preventDefault>
+        <input @bind="_input.Prompt"
+               @bind:event="oninput"
+               class="form-control"
+               placeholder="Ask the local model to manage vehicles..." />
+        <button type="submit" class="btn btn-primary">
+            Send
+        </button>
+    </form>
+</div>
+
+@code {
+    private static readonly string[] Samples =
+    [
+        "Add a new vehicle with ID 123, Toyota Corolla, 2024.",
+        "Update vehicle 123 and change the model to Camry.",
+        "List all vehicles.",
+        "Remove vehicle with ID 123."
+    ];
+
+    private readonly List<ChatTurn> _turns =
+    [
+        new()
+        {
+            Role = "assistant",
+            Text = "I am a local Ollama agent. Ask me to create, update, list, or remove vehicles. I return a structured command; the ASP.NET service layer executes it."
+        }
+    ];
+
+    private readonly PromptInput _input = new();
+    private bool _busy;
+
+    private async Task UseSample(string sample)
+    {
+        _input.Prompt = sample;
+        await SendAsync();
+    }
+
+    private async Task SendAsync()
+    {
+        var prompt = _input.Prompt?.Trim();
+        if (string.IsNullOrWhiteSpace(prompt) || _busy)
+        {
+            return;
+        }
+
+        _turns.Add(new ChatTurn { Role = "user", Text = prompt });
+        _input.Prompt = string.Empty;
+        _busy = true;
+
+        try
+        {
+            var result = await AiCommands.ProcessAsync(prompt);
+            var detail = result.Command.GetAction() == AiAction.Unknown
+                ? result.Message
+                : $"{result.Message}\n\nInterpreted action: {result.Command.GetAction()}";
+
+            _turns.Add(new ChatTurn
+            {
+                Role = "assistant",
+                Text = detail,
+                IsError = !result.Success
+            });
+        }
+        catch (Exception ex)
+        {
+            _turns.Add(new ChatTurn
+            {
+                Role = "assistant",
+                Text = $"Unexpected error: {ex.Message}",
+                IsError = true
+            });
+        }
+        finally
+        {
+            _busy = false;
+        }
+    }
+
+    private sealed class PromptInput
+    {
+        public string Prompt { get; set; } = string.Empty;
+    }
+}

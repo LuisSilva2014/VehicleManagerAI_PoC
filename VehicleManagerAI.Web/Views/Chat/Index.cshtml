@@ -1,0 +1,15 @@
+@using VehicleManagerAI.Web.Components
+@{
+    ViewData["Title"] = "AI Chat";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <h1 class="h3 mb-1">Natural language vehicle manager</h1>
+        <p class="text-muted">
+            Prompts go to the local Ollama model. The model returns JSON. <code>AiCommandService</code>
+            executes the matching CRUD operation. Nothing is executed by the model itself.
+        </p>
+        <component type="typeof(AiChat)" render-mode="Server" />
+    </div>
+</div>

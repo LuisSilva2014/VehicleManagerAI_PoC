@@ -1,0 +1,40 @@
+@{
+    ViewData["Title"] = "How it works";
+}
+
+<h1 class="h3 mb-3">How this PoC is put together</h1>
+<p>
+    The goal is educational: keep the moving parts visible. AI is an extra input channel,
+    not a replacement for application architecture.
+</p>
+
+<ol class="list-group list-group-numbered mb-4">
+    <li class="list-group-item">
+        <strong>UI.</strong> MVC views handle forms. The Blazor <code>AiChat</code> component handles conversation.
+    </li>
+    <li class="list-group-item">
+        <strong>AI repository.</strong> <code>OllamaAiAgentRepository</code> POSTs the prompt to
+        <code>http://localhost:11434/api/chat</code> with a system prompt that demands JSON.
+    </li>
+    <li class="list-group-item">
+        <strong>Parser.</strong> <code>AiCommandParser</code> maps model text to an <code>AiCommand</code>
+        (create / update / delete / get / list).
+    </li>
+    <li class="list-group-item">
+        <strong>Service.</strong> <code>AiCommandService</code> executes that command through
+        <code>IVehicleService</code>, the same API the MVC controllers use.
+    </li>
+    <li class="list-group-item">
+        <strong>Store.</strong> <code>InMemoryVehicleRepository</code> keeps vehicles in process memory so the sample stays offline.
+    </li>
+</ol>
+
+<h2 class="h5">Example prompts</h2>
+<pre class="bg-light p-3 rounded">Add a new vehicle with ID 123, Toyota Corolla, 2024.
+Update vehicle 123 and change the model to Camry.
+Remove vehicle with ID 123.
+List all vehicles.</pre>
+
+<p class="mb-0">
+    Configure the model name and URL in <code>appsettings.json</code> under the <code>Ollama</code> section.
+</p>

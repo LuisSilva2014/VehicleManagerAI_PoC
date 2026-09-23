@@ -1,0 +1,45 @@
+﻿@{
+    ViewData["Title"] = "Vehicle Manager AI PoC";
+}
+
+<div class="hero mb-4">
+    <p class="eyebrow mb-2">ASP.NET MVC + local Ollama</p>
+    <h1 class="display-5 fw-semibold">Vehicle management with an AI interaction layer</h1>
+    <p class="lead text-muted">
+        This proof of concept shows how a normal web app can accept natural language,
+        send it to a locally hosted model, and execute structured CRUD commands —
+        without giving the model direct access to data.
+    </p>
+    <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-primary btn-lg" asp-controller="Chat" asp-action="Index">Open AI chat</a>
+        <a class="btn btn-outline-secondary btn-lg" asp-controller="Vehicles" asp-action="Index">Manage vehicles</a>
+        <a class="btn btn-outline-secondary btn-lg" asp-controller="Home" asp-action="HowItWorks">How it works</a>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h2 class="h5">Traditional UI</h2>
+                <p class="mb-0">MVC forms and screens still perform create, read, update, and delete against an in-memory inventory. Currently @ViewBag.VehicleCount vehicle(s) are stored.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h2 class="h5">AI chat UI</h2>
+                <p class="mb-0">A Blazor component collects prompts and displays the interpreted action plus the business result from the service layer.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h2 class="h5">Fully offline</h2>
+                <p class="mb-0">Ollama runs on your machine. No cloud API key is required. If Ollama is stopped, the MVC screens still work.</p>
+            </div>
+        </div>
+    </div>
+</div>

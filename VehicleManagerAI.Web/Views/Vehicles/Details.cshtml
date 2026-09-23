@@ -1,0 +1,18 @@
+@model Vehicle
+@{
+    ViewData["Title"] = "Vehicle details";
+}
+
+<h1 class="h3">Vehicle #@Model.Id</h1>
+
+<dl class="row">
+    <dt class="col-sm-2">Year</dt>
+    <dd class="col-sm-10">@Model.Year</dd>
+    <dt class="col-sm-2">Make</dt>
+    <dd class="col-sm-10">@Model.Make</dd>
+    <dt class="col-sm-2">Model</dt>
+    <dd class="col-sm-10">@Model.Model</dd>
+</dl>
+
+<a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+<a class="btn btn-outline-secondary" asp-action="Index">Back to list</a>

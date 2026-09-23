@@ -1,0 +1,18 @@
+@model Vehicle
+@{
+    ViewData["Title"] = "Add vehicle";
+}
+
+<h1 class="h3">Add vehicle</h1>
+<p class="text-muted">This form calls <code>IVehicleService.Create</code> — the same method the AI command processor uses.</p>
+
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <partial name="_VehicleForm" />
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a class="btn btn-link" asp-action="Index">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,12 @@
+@model Vehicle
+@{
+    ViewData["Title"] = "Delete vehicle";
+}
+
+<h1 class="h3">Delete vehicle #@Model.Id?</h1>
+<p>This removes <strong>@Model.Year @Model.Make @Model.Model</strong> from the in-memory inventory.</p>
+
+<form asp-action="Delete" method="post">
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a class="btn btn-link" asp-action="Index">Cancel</a>
+</form>
